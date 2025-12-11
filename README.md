@@ -1,3 +1,4 @@
+````markdown
 # 🕵️‍♂️ FraudHunter - Real Time Fraud System
 
 > Um ecossistema de microsserviços para detecção de anomalias financeiras utilizando **Machine Learning**, **Regras Híbridas** e **Observabilidade**.
@@ -31,15 +32,17 @@ graph LR
     C -- Carrega Modelo --> D[(ML.NET Model .zip)]
     C -- Métricas --> E[Prometheus]
     E -- Visualização --> F[Grafana Dashboard]
-FraudHunter.Producer: Console App que gera carga de transações sintéticas (normais e anomalias matemáticas) e publica no RabbitMQ.
+````
 
-FraudHunter.Detector: Worker Service que consome a fila, executa a predição da IA e aplica a lógica de decisão híbrida.
+  * **FraudHunter.Producer:** Console App que gera carga de transações sintéticas (normais e anomalias matemáticas) e publica no RabbitMQ.
+  * **FraudHunter.Detector:** Worker Service que consome a fila, executa a predição da IA e aplica a lógica de decisão híbrida.
+  * **Observabilidade:** Stack Prometheus + Grafana configurada via Docker para monitoramento de TPS (Transações por Segundo) e Alertas de Risco.
 
-Observabilidade: Stack Prometheus + Grafana configurada via Docker para monitoramento de TPS (Transações por Segundo) e Alertas de Risco.
+-----
 
-📦 Estrutura do Projeto
-Plaintext
+## 📦 Estrutura do Projeto
 
+```text
 FraudHunter/
 ├── FraudHunter.Core/       # Modelos e Contratos (Shared Kernel)
 ├── FraudHunter.Detector/   # Worker Service (Consumidor + IA)
@@ -48,60 +51,81 @@ FraudHunter/
 ├── grafana/                # Configurações de Provisionamento (IaC)
 ├── docker-compose.yml      # Orquestração da Infraestrutura
 └── dashboard.json          # Backup do Dashboard Grafana
-📊 Screenshots
-Dashboard de Monitoramento (Grafana)
+```
+
+-----
+
+## 📊 Screenshots
+
+### Dashboard de Monitoramento (Grafana)
 ![Dashboard Grafana](Assets/grafana-dash.png)
-Visualização em tempo real da vazão de transações e velocímetro de risco. A infraestrutura utiliza Provisioning, subindo configurada automaticamente.
+Visualização em tempo real da vazão de transações e velocímetro de risco. A infraestrutura utiliza **Provisioning**, subindo configurada automaticamente.
 
-Detecção Híbrida (Logs do Detector)
+### Detecção Híbrida (Logs do Detector)
 ![Logs do Terminal](Assets/producer-detector.png)
-O sistema identifica a origem do bloqueio: IA ML.NET (comportamento suspeito) ou REGRA DE VALOR (montante excessivo).
+O sistema identifica a origem do bloqueio: **IA ML.NET** (comportamento suspeito) ou **REGRA DE VALOR** (montante excessivo).
 
-🚀 Como Executar o Projeto
-Pré-requisitos
-Docker Desktop instalado.
+-----
 
-.NET 10 SDK instalado.
+## 🚀 Como Executar o Projeto
 
-1. Clonar e Subir a Infraestrutura
+### ⚠️ Importante: Dataset
+
+O dataset utilizado (`creditcard.csv`) excede o limite de tamanho do GitHub. Antes de rodar o treinamento, faça o download dele no Kaggle e coloque na pasta `FraudHunter.Trainer`.
+👉 **[Download do Dataset no Kaggle](https://www.kaggle.com/mlg-ulb/creditcardfraud)**
+
+### Pré-requisitos
+
+  * [Docker Desktop](https://www.docker.com/) instalado.
+  * [.NET 10 SDK](https://dotnet.microsoft.com/download) instalado.
+
+### 1\. Clonar e Subir a Infraestrutura
+
 Na raiz do projeto, execute o Docker Compose. Isso subirá o RabbitMQ, Prometheus e Grafana já configurados.
 
-Bash
-
+```bash
 docker-compose up -d
-2. Iniciar o Detector (Consumidor)
+```
+
+### 2\. Iniciar o Detector (Consumidor)
+
 Este serviço ficará aguardando mensagens na fila.
 
-Bash
-
+```bash
 dotnet run --project FraudHunter.Detector
-3. Iniciar o Simulador (Produtor)
+```
+
+### 3\. Iniciar o Simulador (Produtor)
+
 Em um novo terminal, inicie o gerador de transações.
 
-Bash
-
+```bash
 dotnet run --project FraudHunter.Producer
-4. Acessar o Dashboard
-Acesse: http://localhost:3000
+```
 
-Login: admin / Senha: admin
+### 4\. Acessar o Dashboard
 
-Vá em Dashboards > FraudHunter.
+  * Acesse: `http://localhost:3000`
+  * Login: `admin` / Senha: `admin`
+  * Vá em **Dashboards** \> **FraudHunter**.
+  * *Dica:* Se os gráficos parecerem vazios, verifique se o "Time Range" do Grafana (canto superior direito) está definido para **"Last 5 minutes"**.
 
-Dica: Se os gráficos parecerem vazios, verifique se o "Time Range" do Grafana (canto superior direito) está definido para "Last 5 minutes".
+-----
 
-🛠️ Tecnologias e Práticas
-C# / .NET 10: Worker Services e Console Apps de alta performance.
+## 🛠️ Tecnologias e Práticas
 
-ML.NET (Randomized PCA): Detecção de anomalias não supervisionada.
+  * **C\# / .NET 10**: Worker Services e Console Apps de alta performance.
+  * **ML.NET (Randomized PCA)**: Detecção de anomalias não supervisionada.
+  * **RabbitMQ**: Mensageria para desacoplamento e resiliência.
+  * **Prometheus & Grafana**: Monitoramento de métricas customizadas (`prometheus-net`).
+  * **Docker Compose**: Orquestração de containers.
+  * **Infrastructure as Code (IaC)**: Provisionamento automático de Data Sources e Dashboards do Grafana.
 
-RabbitMQ: Mensageria para desacoplamento e resiliência.
+-----
 
-Prometheus & Grafana: Monitoramento de métricas customizadas (prometheus-net).
+## 👨‍💻 Autor
 
-Docker Compose: Orquestração de containers.
+Desenvolvido por **Everton**
 
-Infrastructure as Code (IaC): Provisionamento automático de Data Sources e Dashboards do Grafana.
-
-👨‍💻 Autor
-Desenvolvido por Everton
+```
+```
