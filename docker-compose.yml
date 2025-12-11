@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: fraudhunter_rabbit
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  prometheus:
+    image: prom/prometheus
+    container_name: fraudhunter_prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana
+    container_name: fraudhunter_grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+    volumes:
+          - grafana_data:/var/lib/grafana
+          - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+          - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+          - ./grafana/provisioning/dashboards/fraud_dashboard.json:/var/lib/grafana/dashboards/fraud_dashboard.json
+
+volumes:
+  grafana_data:
