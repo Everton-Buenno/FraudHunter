@@ -1,5 +1,4 @@
-````markdown
-# 🕵️‍♂️ FraudHunter - Real Time Fraud System
+# FraudHunter - Real Time Fraud System
 
 > Um ecossistema de microsserviços para detecção de anomalias financeiras utilizando **Machine Learning**, **Regras Híbridas** e **Observabilidade**.
 
@@ -9,6 +8,8 @@
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
 ![Grafana](https://img.shields.io/badge/Grafana-F46800?style=flat&logo=grafana&logoColor=white)
 ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=flat&logo=prometheus&logoColor=white)
+
+---
 
 ---
 
